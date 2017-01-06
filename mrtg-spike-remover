@@ -1,0 +1,12 @@
+#! /bin/sh
+
+sudo su
+cd /var/www_2
+LIST=`ls *.log`
+mkdir -p old/
+cp *.log old/
+for i in $LIST
+        do awk '!(NF==5 && ($4+$5) > 1000000)'  old/$i > $i
+done
+kill -9 `pidof perl`
+env LANG=C /usr/bin/mrtg /etc/mrtg/mrtg.cfg
